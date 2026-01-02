@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roth IRA 2026 Progress Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tracker-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .goal-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .year {
+            color: #718096;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .amounts {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .amount-item {
+            text-align: center;
+        }
+
+        .amount-label {
+            color: #718096;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .amount-value {
+            color: #2d3748;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .current {
+            color: #667eea;
+        }
+
+        .target {
+            color: #48bb78;
+        }
+
+        .remaining {
+            color: #ed8936;
+        }
+
+        .progress-container {
+            margin: 30px 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-label {
+            color: #4a5568;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress-percentage {
+            color: #667eea;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            transition: width 1s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .progress-text {
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .milestone {
+            text-align: center;
+            padding: 15px 10px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .milestone.achieved {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+
+        .milestone.achieved .milestone-amount {
+            color: white;
+        }
+
+        .milestone.achieved .milestone-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .milestone-amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+
+        .milestone-label {
+            font-size: 11px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .checkmark {
+            font-size: 18px;
+            margin-left: 5px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #a0aec0;
+            font-size: 12px;
+        }
+
+        .update-note {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .update-note strong {
+            color: #d68910;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .update-note p {
+            color: #7d6608;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @keyframes fillAnimation {
+            from {
+                width: 0%;
+            }
+        }
+
+        .progress-bar-fill {
+            animation: fillAnimation 1.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="tracker-card">
+        <div class="header">
+            <div class="goal-icon">🎯</div>
+            <h1>Roth IRA Progress</h1>
+            <div class="year">2026 Goal</div>
+        </div>
+
+        <div class="amounts">
+            <div class="amount-item">
+                <div class="amount-label">Current</div>
+                <div class="amount-value current" id="currentAmount">$0</div>
+            </div>
+            <div class="amount-item">
+                <div class="amount-label">Target</div>
+                <div class="amount-value target">$7,500</div>
+            </div>
+            <div class="amount-item">
+                <div class="amount-label">Remaining</div>
+                <div class="amount-value remaining" id="remainingAmount">$7,500</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-header">
+                <div class="progress-label">Overall Progress</div>
+                <div class="progress-percentage" id="percentage">0%</div>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar" style="width: 0%">
+                    <span class="progress-text" id="progressText"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone-grid">
+            <div class="milestone" id="milestone25">
+                <div class="milestone-amount">$1,875</div>
+                <div class="milestone-label">25%</div>
+            </div>
+            <div class="milestone" id="milestone50">
+                <div class="milestone-amount">$3,750</div>
+                <div class="milestone-label">50%</div>
+            </div>
+            <div class="milestone" id="milestone75">
+                <div class="milestone-amount">$5,625</div>
+                <div class="milestone-label">75%</div>
+            </div>
+            <div class="milestone" id="milestone100">
+                <div class="milestone-amount">$7,500</div>
+                <div class="milestone-label">Complete!</div>
+            </div>
+        </div>
+
+        <div class="update-note">
+            <strong>📝 How to Update:</strong>
+            <p>Edit line 257 in this HTML file. Change <code>const currentContribution = 0;</code> to your actual contribution amount. Save and refresh!</p>
+        </div>
+
+        <div class="footer">
+            Last updated: <span id="lastUpdate"></span>
+        </div>
+    </div>
+
+    <script>
+        // ===== UPDATE THIS NUMBER WITH YOUR CURRENT CONTRIBUTIONS =====
+        const currentContribution = 0;
+        // ==============================================================
+
+        const target = 7500;
+        const remaining = target - currentContribution;
+        const percentage = (currentContribution / target) * 100;
+
+        // Update all display elements
+        document.getElementById('currentAmount').textContent = '$' + currentContribution.toLocaleString();
+        document.getElementById('remainingAmount').textContent = '$' + remaining.toLocaleString();
+        document.getElementById('percentage').textContent = Math.round(percentage) + '%';
+        document.getElementById('progressBar').style.width = percentage + '%';
+        
+        // Show percentage in progress bar if > 15%
+        if (percentage > 15) {
+            document.getElementById('progressText').textContent = Math.round(percentage) + '%';
+        }
+
+        // Update milestone achievements
+        if (percentage >= 25) {
+            document.getElementById('milestone25').classList.add('achieved');
+            document.getElementById('milestone25').innerHTML += ' <span class="checkmark">✓</span>';
+        }
+        if (percentage >= 50) {
+            document.getElementById('milestone50').classList.add('achieved');
+            document.getElementById('milestone50').innerHTML += ' <span class="checkmark">✓</span>';
+        }
+        if (percentage >= 75) {
+            document.getElementById('milestone75').classList.add('achieved');
+            document.getElementById('milestone75').innerHTML += ' <span class="checkmark">✓</span>';
+        }
+        if (percentage >= 100) {
+            document.getElementById('milestone100').classList.add('achieved');
+            document.getElementById('milestone100').innerHTML += ' <span class="checkmark">✓</span>';
+        }
+
+        // Update timestamp
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('lastUpdate').textContent = now.toLocaleDateString('en-US', options);
+    </script>
+</body>
+</html>
